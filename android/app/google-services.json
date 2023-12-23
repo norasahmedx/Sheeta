@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "674387186130",
+    "project_id": "sheeta-noras",
+    "storage_bucket": "sheeta-noras.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:674387186130:android:47b845cd3ef495eaea780b",
+        "android_client_info": {
+          "package_name": "com.example.sheeta"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD5ZqI6ikQuIq4tNoD13h9mWoxYWSrexOs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
