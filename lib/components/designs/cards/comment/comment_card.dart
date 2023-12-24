@@ -67,10 +67,7 @@ class _CommentCardState extends State<CommentCard> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                UserAvatar(
-                  user: user,
-                  size: 's',
-                ),
+                UserAvatar(user: user),
 
                 // Use Expanded to make CommentCardDetails take remaining space
                 Expanded(

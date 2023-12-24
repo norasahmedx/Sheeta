@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:sheeta/components/designs/global/bottom_navbar.dart';
 import 'package:sheeta/components/designs/global/is_loading.dart';
@@ -10,7 +11,7 @@ import 'package:sheeta/screens/profile.dart';
 import 'package:sheeta/screens/search.dart';
 
 class GrandScreen extends StatefulWidget {
-  const GrandScreen({super.key});
+  const GrandScreen({Key? key}) : super(key: key);
 
   @override
   State<GrandScreen> createState() => _GrandScreenState();
@@ -23,17 +24,21 @@ class _GrandScreenState extends State<GrandScreen> {
   int index = 0;
 
   onPageChanged(int idx) {
-    setState(() {
-      index = idx;
-    });
+    if (mounted) {
+      setState(() {
+        index = idx;
+      });
+    }
   }
 
   // To get data from DB using provider
   getDataFromDB() async {
     // data doesn't loaded yet.
-    setState(() {
-      loaded = false;
-    });
+    if (mounted) {
+      setState(() {
+        loaded = false;
+      });
+    }
 
     // Provider Work
     UserProvider userProvider = Provider.of(context, listen: false);
@@ -58,13 +63,34 @@ class _GrandScreenState extends State<GrandScreen> {
   @override
   Widget build(BuildContext context) {
     return IsLoading(
-        loaded: loaded,
-        child: SafeArea(
+      loaded: loaded,
+      child: SafeArea(
+        child: PopScope(
+          canPop: false,
+          onPopInvoked: (bool didPop) {
+            // If not on the home screen, navigate to the home screen
+            if (index != 0) {
+              pageController.animateToPage(
+                0,
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.easeInOut,
+              );
+            } else if (pageController.hasClients && pageController.offset > 0) {
+              pageController.animateTo(
+                0.0,
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.easeInOut,
+              );
+            } else {
+              SystemNavigator.pop();
+            }
+          },
           child: Scaffold(
             bottomNavigationBar: BottomNavbar(
-                onPageChanged: onPageChanged,
-                pageController: pageController,
-                index: index),
+              onPageChanged: onPageChanged,
+              pageController: pageController,
+              index: index,
+            ),
             body: PageView(
               controller: pageController,
               onPageChanged: (index) {
@@ -79,6 +105,8 @@ class _GrandScreenState extends State<GrandScreen> {
               ],
             ),
           ),
-        ));
+        ),
+      ),
+    );
   }
 }

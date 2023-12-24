@@ -32,8 +32,8 @@ class _PostImageState extends State<PostImage> {
     doubleTapHandler() async {
       toggleLike();
       if (!check) {
-        await Posts().likeSwitch(
-            context: context, postId: widget.post.id, type: 'add');
+        await Posts()
+            .likeSwitch(context: context, postId: widget.post.id, type: 'add');
       }
     }
 

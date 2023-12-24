@@ -14,6 +14,13 @@ class Posts {
   final String table = 'posts';
   final uid = FirebaseAuth.instance.currentUser!.uid;
 
+  Stream<QuerySnapshot<Map<String, dynamic>>> get() {
+    return FirebaseFirestore.instance
+        .collection('posts')
+        .orderBy('createdTime', descending: true)
+        .snapshots();
+  }
+
   updateUserInfo(Map<String, dynamic> user) async {
     try {
       // Update the user's avatar in posts where uid is equal to the user's uid
@@ -50,7 +57,7 @@ class Posts {
     }
   }
 
-  create({
+  Future<void> create({
     required BuildContext context,
     required String description,
     required String? imgName,
@@ -84,8 +91,6 @@ class Posts {
           .set(post.convertToMap())
           .then((value) => showToast('Your post published successfully'))
           .catchError((error) => showToast("Failed to create post: $error"));
-
-      return posts;
     } catch (e) {
       debugPrint(e.toString());
     }

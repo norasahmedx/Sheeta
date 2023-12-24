@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'package:sheeta/components/designs/add_post_screens/step_one.dart';
-import 'package:sheeta/components/designs/add_post_screens/step_two.dart';
+import 'package:sheeta/screens/add_post/step_one.dart';
+import 'package:sheeta/screens/add_post/step_two.dart';
 
 class AddPost extends StatefulWidget {
   const AddPost({super.key});
@@ -15,10 +15,12 @@ class _AddPostState extends State<AddPost> {
   String? imgName;
 
   void updateImg(Uint8List? path, String? name) {
-    setState(() {
-      imgPath = path;
-      imgName = name;
-    });
+    if (mounted) {
+      setState(() {
+        imgPath = path;
+        imgName = name;
+      });
+    }
   }
 
   @override

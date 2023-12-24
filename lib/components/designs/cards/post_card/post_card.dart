@@ -27,9 +27,11 @@ class _PostCardState extends State<PostCard> {
 
   fetchUser() async {
     var u = await Auth().getById(uid: widget.post.uid);
-    setState(() {
-      user = u;
-    });
+    if (mounted) {
+      setState(() {
+        user = u;
+      });
+    }
   }
 
   @override
@@ -47,15 +49,14 @@ class _PostCardState extends State<PostCard> {
           const SizedBox(height: large),
           //* post headlinew
           PostHeadline(post: widget.post, user: user),
-          const SizedBox(height: large),
+          const SizedBox(height: medium),
           // post details (image, action area, likes count, title, comments, date)
           //* image
           PostImage(post: widget.post),
-          const SizedBox(height: large - 8),
+          const SizedBox(height: small),
 
           //* action area
           PostActionArea(post: widget.post),
-          const SizedBox(height: xs),
 
           //* post details
           Papa(
@@ -65,18 +66,17 @@ class _PostCardState extends State<PostCard> {
               children: [
                 // * likes count
                 PostLikesCount(likes: widget.post.likes),
-                const SizedBox(height: xs),
+                const SizedBox(height: small),
 
                 // * title
                 PostTitle(user: user, description: widget.post.description),
                 // * comments area
                 const SizedBox(height: small - 3),
                 PostComments(post: widget.post),
-                const SizedBox(height: xs),
+                const SizedBox(height: small),
 
                 // * date published
                 PostDate(datePublished: widget.post.createdTime),
-                const SizedBox(height: large),
               ],
             ),
           ),

@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sheeta/components/designs/cards/user_avatar.dart';
+import 'package:sheeta/providers/user_provider.dart';
 import 'package:sheeta/static/colors.dart';
 
 class BottomNavbar extends StatefulWidget {
@@ -20,6 +23,8 @@ class BottomNavbar extends StatefulWidget {
 class _BottomNavbarState extends State<BottomNavbar> {
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<UserProvider>(context).getUser;
+
     return CupertinoTabBar(
       currentIndex: widget.index,
       backgroundColor: mobBg,
@@ -44,10 +49,13 @@ class _BottomNavbarState extends State<BottomNavbar> {
           color: widget.index == 2 ? primaryColor : secondaryColor,
         )),
         BottomNavigationBarItem(
-            icon: Icon(
-          Icons.person,
-          color: widget.index == 3 ? primaryColor : secondaryColor,
-        )),
+          icon: UserAvatar(
+            size: 's',
+            user: user,
+            clickable: false,
+            roundedBorder: widget.index == 3,
+          ),
+        ),
       ],
     );
   }

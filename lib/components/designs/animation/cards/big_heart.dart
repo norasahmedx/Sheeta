@@ -23,9 +23,11 @@ class _BigHeartState extends State<BigHeart> {
           milliseconds: 400,
         ),
         onEnd: () {
-          setState(() {
-            widget.toggleLike();
-          });
+          if (mounted) {
+            setState(() {
+              widget.toggleLike();
+            });
+          }
         },
         child: const Icon(
           Icons.favorite,

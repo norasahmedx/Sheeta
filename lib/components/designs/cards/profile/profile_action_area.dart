@@ -67,9 +67,11 @@ class _ProfileActionAreaState extends State<ProfileActionArea> {
     await widget.updateFollowers();
     //* toggle the button
     // follow = !follow
-    setState(() {
-      isLoading = false;
-    });
+    if (mounted) {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   updateProfile() async {

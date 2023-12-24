@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:sheeta/components/designs/loadings/skelton.dart';
-import 'package:sheeta/components/designs/texts/text_medium.dart';
 import 'package:sheeta/components/designs/texts/text_x_small.dart';
 import 'package:sheeta/components/designs/texts/text_xx_small.dart';
 import 'package:sheeta/models/comment.dart';
@@ -39,7 +38,7 @@ class _CommentCardDetailsState extends State<CommentCardDetails> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         widget.user != null
-            ? TextMedium(
+            ? TextXXSmall(
                 txt: widget.user!.username, fontWeight: FontWeight.bold)
             : const SkeltonUsername(),
         const SizedBox(height: 2),

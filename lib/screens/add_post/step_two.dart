@@ -36,9 +36,12 @@ class _StepTwoState extends State<StepTwo> {
   @override
   Widget build(BuildContext context) {
     uploadPostHandler() async {
-      setState(() {
-        loaded = false;
-      });
+      FocusManager.instance.primaryFocus?.unfocus();
+      if (mounted) {
+        setState(() {
+          loaded = false;
+        });
+      }
 
       await Posts().create(
         context: context,
@@ -49,16 +52,11 @@ class _StepTwoState extends State<StepTwo> {
         commentsIds: [],
       );
 
-      setState(() {
-        loaded = true;
-      });
-
-      if (mounted) {
-        Navigator.pop(
-          context,
-          MaterialPageRoute(builder: (context) => const GrandScreen()),
-        );
-      }
+      if (!mounted) return;
+      Navigator.pop(
+        context,
+        MaterialPageRoute(builder: (context) => const GrandScreen()),
+      );
     }
 
     return Scaffold(

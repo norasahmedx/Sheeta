@@ -2,10 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:sheeta/components/designs/cards/comment/comment_card.dart';
 import 'package:sheeta/components/designs/loadings/circle.dart';
-import 'package:sheeta/components/designs/texts/text_xx_small.dart';
+import 'package:sheeta/components/designs/texts/text_medium.dart';
+import 'package:sheeta/components/designs/texts/text_title.dart';
 import 'package:sheeta/firebase/comments.dart';
 import 'package:sheeta/models/comment.dart';
 import 'package:sheeta/shared/show_toast.dart';
+import 'package:sheeta/static/colors.dart';
+import 'package:sheeta/static/sizes.dart';
 
 class CommentsBody extends StatelessWidget {
   final String postId;
@@ -39,8 +42,14 @@ class CommentsBody extends StatelessWidget {
                         comment: comment, replyOnUser: replyOnUser);
                   }).toList(),
                 )
-              : const Center(
-                  child: TextXXSmall(txt: 'Be the first one commented!')),
+              : const Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextTitle(txt: 'No comments yet!', color: secondaryColor),
+                    SizedBox(height: small),
+                    TextMedium(txt: 'Be the first one commented!'),
+                  ],
+                ),
         );
       },
     );

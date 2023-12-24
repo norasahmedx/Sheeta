@@ -20,9 +20,12 @@ class _StepOneState extends State<StepOne> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: mobBg,
-        title: const TextTitle(txt: 'Uplaod a new post'),
+        title: const TextTitle(txt: 'New Post'),
       ),
-      body: GestureDetector(
+      body:
+          //TODO: Open gallery and fetch the image inside the app
+
+          GestureDetector(
         onTap: () async {
           try {
             await Picker().showmodel(context, setState, widget.updateImg);
