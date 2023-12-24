@@ -33,9 +33,10 @@ class _CommentInputState extends State<CommentInput> {
   @override
   Widget build(BuildContext context) {
     commentHandler() async {
+      // if it a reply
       if (widget.commentController.value.text.contains('@')) {
         if (widget.oldCommentId.text.isNotEmpty) {
-          Comments().create(
+          await Comments().create(
             postId: widget.postId,
             grandCommentId: widget.oldCommentId.text,
             commentBody: widget.commentController.text,
@@ -43,9 +44,12 @@ class _CommentInputState extends State<CommentInput> {
           );
         } else {
           showToast('Something went wrong, please try again');
+          widget.commentFocus.requestFocus();
+          widget.commentController.clear();
         }
-      } else {
-        Comments().create(
+      } // if it a comment
+      else {
+        await Comments().create(
           postId: widget.postId,
           commentBody: widget.commentController.text,
           user: widget.user,
@@ -54,6 +58,7 @@ class _CommentInputState extends State<CommentInput> {
 
       widget.commentFocus.unfocus();
       widget.commentController.clear();
+      
     }
 
     return TextField(

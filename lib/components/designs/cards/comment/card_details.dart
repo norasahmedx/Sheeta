@@ -14,8 +14,8 @@ class CommentCardDetails extends StatefulWidget {
   final String commentBody;
   final String createdTime;
   final String? grandCommentId;
-  final void Function(Comment comment, String? grandCommentId, String username)
-      replyOnUser;
+  final Function replyOnUser;
+  final Function openReps;
 
   const CommentCardDetails({
     super.key,
@@ -25,6 +25,7 @@ class CommentCardDetails extends StatefulWidget {
     required this.createdTime,
     required this.grandCommentId,
     required this.replyOnUser,
+    required this.openReps,
   });
 
   @override
@@ -48,8 +49,9 @@ class _CommentCardDetailsState extends State<CommentCardDetails> {
           children: [
             TextXSmall(
               onTap: () {
+                widget.openReps();
                 widget.replyOnUser(
-                  widget.comment,
+                  widget.comment.id,
                   widget.grandCommentId,
                   widget.user!.username,
                 );

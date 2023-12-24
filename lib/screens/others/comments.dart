@@ -4,7 +4,6 @@ import 'package:sheeta/components/bodies/comments_body.dart';
 import 'package:sheeta/components/designs/cards/write_comment.dart';
 import 'package:sheeta/components/designs/containers/screen_container.dart';
 import 'package:sheeta/components/designs/texts/text_title.dart';
-import 'package:sheeta/models/comment.dart';
 import 'package:sheeta/providers/user_provider.dart';
 import 'package:sheeta/shared/show_toast.dart';
 import 'package:sheeta/static/colors.dart';
@@ -27,14 +26,14 @@ class _CommentsScreenState extends State<CommentsScreen> {
     FocusNode commentFocus = FocusNode();
 
     replyOnUser(
-      Comment comment,
+      String commentId,
       String? grandCommentId,
       String username,
     ) {
       try {
         if (grandCommentId == null) {
           commentController.value = TextEditingValue(text: '@$username ');
-          oldCommentId.value = TextEditingValue(text: comment.id);
+          oldCommentId.value = TextEditingValue(text: commentId);
         } else {
           commentController.value = TextEditingValue(text: '@$username ');
           oldCommentId.value = TextEditingValue(text: grandCommentId);

@@ -19,7 +19,7 @@ class UserAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: ss),
+      padding: const EdgeInsets.only(right: ss),
       child: user != null
           ? clickable
               ? GestureDetector(

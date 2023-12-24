@@ -9,7 +9,7 @@ import 'package:uuid/uuid.dart';
 class Comments {
   final String table = 'comments';
 
-  likeSwitch({
+  Future<void> likeSwitch({
     required String commentId,
     required String type,
   }) async {
@@ -43,8 +43,7 @@ class Comments {
     }
   }
 
-  static Future<void> updateComment(
-      String commentId, Comment updatedComment) async {
+  Future<void> updateComment(String commentId, Comment updatedComment) async {
     try {
       await FirebaseFirestore.instance
           .collection('comments')
@@ -56,7 +55,7 @@ class Comments {
     }
   }
 
-  static Future<Comment?> getCommentById(String commentId) async {
+  Future<Comment?> getCommentById(String commentId) async {
     try {
       final DocumentSnapshot<Map<String, dynamic>> snapshot =
           await FirebaseFirestore.instance
@@ -86,14 +85,24 @@ class Comments {
     }
   }
 
-  Stream<QuerySnapshot<Object?>> getSnapByPostId(String postId) {
+  Stream<QuerySnapshot<Object?>> getCommentsByPostId(String postId) {
     return FirebaseFirestore.instance
         .collection('comments')
         .where('postId', isEqualTo: postId)
+        .where('grandComment', isNull: true)
         .snapshots();
   }
 
-  updateUserInfo(Map<String, dynamic> user) async {
+  Stream<QuerySnapshot<Object?>> getRepliesByPostId(
+      String postId, String grandCommentId) {
+    return FirebaseFirestore.instance
+        .collection('comments')
+        .where('postId', isEqualTo: postId)
+        .where('grandComment', isEqualTo: grandCommentId)
+        .snapshots();
+  }
+
+  Future<void> updateUserInfo(Map<String, dynamic> user) async {
     try {
       // Update the user's avatar in posts where uid is equal to the user's uid
       await FirebaseFirestore.instance
@@ -110,7 +119,7 @@ class Comments {
     }
   }
 
-  create({
+  Future<void> create({
     required String postId,
     required String commentBody,
     required UserData? user,

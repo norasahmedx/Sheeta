@@ -9,17 +9,18 @@ import 'package:sheeta/shared/show_toast.dart';
 
 class CommentsBody extends StatelessWidget {
   final String postId;
-  final void Function(Comment comment, String? grandCommentId, String username) replyOnUser;
+  final Function replyOnUser;
   const CommentsBody(
       {super.key, required this.postId, required this.replyOnUser});
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: Comments().getSnapByPostId(postId),
+      stream: Comments().getCommentsByPostId(postId),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) {
           showToast('Something went wrong, please try again later.');
+          debugPrint(snapshot.error.toString());
         }
 
         if (snapshot.connectionState == ConnectionState.waiting) {
