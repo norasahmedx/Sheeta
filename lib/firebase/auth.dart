@@ -169,8 +169,10 @@ class Auth {
   }) async {
     try {
       if (imgName != null || imgPath != null) {
-        // delete old avatar from storage
-        deleteImageFromStorage('avatar', oldUser!.avatarName);
+        // delete the old avatar from storage if the user already published an avatar
+        if (oldUser!.avatarName != 'default.png') {
+          deleteImageFromStorage('avatar', oldUser.avatarName);
+        }
 
         // upload photo to storage
         String url = await getImgURL(imgName: imgName, imgPath: imgPath);
