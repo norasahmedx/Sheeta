@@ -56,8 +56,8 @@ class _GrandScreenState extends State<GrandScreen> {
 
   @override
   void initState() {
-    super.initState();
     getDataFromDB();
+    super.initState();
   }
 
   @override

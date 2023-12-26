@@ -6,7 +6,7 @@ import 'package:sheeta/shared/show_popup.dart';
 // Function to check for a new version from Firebase
 Future<void> checkForNewVersion(context) async {
   try {
-    String currentVersion = "0.1.2"; // Replace with your app's current version
+    String currentVersion = "0.1.3"; // Replace with your app's current version
 
     // Fetch the latest version from Firebase.
     var latestVersion = await FirebaseFirestore.instance
@@ -21,9 +21,10 @@ Future<void> checkForNewVersion(context) async {
     if (currentVersion.compareTo(latestVersionNumber) < 0) {
       showPopup(
         context: context,
-        title: 'Update Available',
-        content: 'A new version of the app is available. Update now?',
-        actionButtonText: 'Update',
+        title: 'Sheeta v$latestVersionNumber Available',
+        content:
+            'Discover enhanced features and a sleeker experience. Elevate your Sheeta now!',
+        actionButtonText: 'Update Now',
         onPressed: () async {
           await appUpdater(latestVersionUrl);
           Navigator.of(context).pop();

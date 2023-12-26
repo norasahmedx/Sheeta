@@ -24,7 +24,6 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    checkForNewVersion(context);
     return ChangeNotifierProvider(
       create: (context) {
         return UserProvider();
@@ -41,10 +40,13 @@ class MainApp extends StatelessWidget {
                   body: Center(
                       child: CircularProgressIndicator(color: Colors.white)));
             } else if (snapshot.hasError) {
+              checkForNewVersion(context);
               return showSnackBar(context, "Something went wrong");
             } else if (snapshot.hasData) {
+              checkForNewVersion(context);
               return const GrandScreen();
             } else {
+              checkForNewVersion(context);
               return const Login();
             }
           },

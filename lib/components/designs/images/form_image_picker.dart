@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'package:sheeta/classes/picker.dart';
+import 'package:sheeta/components/designs/images/sheeta_gallery.dart';
+import 'package:sheeta/models/image.dart';
 import 'package:sheeta/static/sizes.dart';
 
 class FormImagePicker extends StatefulWidget {
@@ -35,8 +36,10 @@ class _FormImagePickerState extends State<FormImagePicker> {
         color: Color.fromARGB(125, 78, 91, 110),
       ),
       child: GestureDetector(
-        onTap: () {
-          Picker().showmodel(context, setState, widget.updateImg);
+        onTap: () async {
+          final Photo? img = await Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const SheetaGallery()));
+          img != null ? widget.updateImg(img.imgPath, img.imgName) : null;
         },
         child: !widget.profile
             ? Stack(
