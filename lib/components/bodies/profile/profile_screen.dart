@@ -18,7 +18,7 @@ class ProfileScreen extends StatefulWidget {
   final int posts;
   final Function updateFollowers;
   final Function updateUserInfo;
-  final Function(Uint8List, String) updateImg;
+  final Function(Uint8List?, String?) updateImg;
 
   const ProfileScreen({
     super.key,

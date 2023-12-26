@@ -1,10 +1,10 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'package:sheeta/components/designs/images/picker.dart';
+import 'package:sheeta/classes/picker.dart';
 import 'package:sheeta/static/sizes.dart';
 
 class FormImagePicker extends StatefulWidget {
-  final Function(Uint8List, String) updateImg;
+  final Function(Uint8List?, String?) updateImg;
   final Uint8List? imgPath;
   final String? imgName;
   final String defImage;

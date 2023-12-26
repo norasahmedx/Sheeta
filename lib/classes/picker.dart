@@ -11,7 +11,7 @@ class Picker {
     ImageSource source,
     BuildContext context,
     dynamic setState,
-    updateImg,
+    void Function(Uint8List? path, String? name) updateImg,
   ) async {
     Navigator.pop(context);
     final XFile? pickedImg = await ImagePicker().pickImage(
@@ -41,7 +41,7 @@ class Picker {
   showmodel(
     BuildContext context,
     dynamic setState,
-    updateImg,
+    void Function(Uint8List? path, String? name) updateImg,
   ) {
     return showModalBottomSheet(
       context: context,
@@ -102,5 +102,9 @@ class Picker {
         );
       },
     );
+  }
+
+  openGallery() async {
+    
   }
 }

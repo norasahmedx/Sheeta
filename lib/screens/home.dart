@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sheeta/components/bodies/home_screen.dart';
 import 'package:sheeta/firebase/auth.dart';
-import 'package:sheeta/screens/add_post/index.dart';
+import 'package:sheeta/screens/others/publish_post.dart';
 import 'package:sheeta/static/colors.dart';
 import 'package:sheeta/static/sizes.dart';
 
@@ -42,7 +42,7 @@ class _HomeState extends State<Home> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const AddPost()),
+                              builder: (context) => const PublishPost()),
                         );
                       },
                       icon: const Icon(Icons.add_a_photo_rounded, size: xxl),

@@ -13,7 +13,7 @@ class ProfileDetails extends StatefulWidget {
   final bool isAvatarLoaded;
   final bool? isItMe;
 
-  final Function(Uint8List, String) updateImg;
+  final Function(Uint8List?, String?) updateImg;
   const ProfileDetails({
     super.key,
     required this.userInfo,

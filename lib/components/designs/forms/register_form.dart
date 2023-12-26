@@ -33,7 +33,7 @@ class _RegisterFormState extends State<RegisterForm> {
   final bioController = TextEditingController();
   FocusNode usernameFocus = FocusNode();
 
-  void updateImg(Uint8List path, String name) {
+  void updateImg(Uint8List? path, String? name) {
     setState(() {
       imgPath = path;
       imgName = name;

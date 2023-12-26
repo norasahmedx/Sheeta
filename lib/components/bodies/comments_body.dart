@@ -45,7 +45,8 @@ class CommentsBody extends StatelessWidget {
               : const Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    TextTitle(txt: 'No comments yet!', color: secondaryColor),
+                    TextTitle(
+                        txt: 'No comments yet!', color: primaryAccentColor),
                     SizedBox(height: small),
                     TextMedium(txt: 'Be the first one commented!'),
                   ],

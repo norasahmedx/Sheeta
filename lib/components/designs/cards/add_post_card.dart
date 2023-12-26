@@ -7,7 +7,7 @@ import 'package:sheeta/components/designs/inputs/caption.dart';
 import 'package:sheeta/providers/user_provider.dart';
 
 class AddPostCard extends StatelessWidget {
-  final Function updateImg;
+  final void Function(Uint8List? path, String? name)  updateImg;
   final Uint8List? imgPath;
   final String? imgName;
   final TextEditingController descriptionController;
