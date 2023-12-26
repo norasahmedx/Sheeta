@@ -315,9 +315,9 @@ class Auth {
             bio: bio,
             username: username,
             avatar: url.isEmpty
-                ? 'https://firebasestorage.googleapis.com/v0/b/sheeta-noras.appspot.com/o/avatar%2Favatar.png?alt=media&token=6d7b0610-5d26-47c5-b7db-01c7e728acfb'
+                ? 'https://firebasestorage.googleapis.com/v0/b/sheeta-noras.appspot.com/o/avatar%2Fdefault.png?alt=media&token=ff23e64b-8a7f-4303-86ce-228107085438'
                 : url,
-            avatarName: imgName ?? 'avatar.png',
+            avatarName: imgName ?? 'default.png',
             uid: credential.user!.uid,
           );
 
