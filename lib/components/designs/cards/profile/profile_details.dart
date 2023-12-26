@@ -43,9 +43,7 @@ class _ProfileDetailsState extends State<ProfileDetails> {
                 isAvatarLoaded: widget.isAvatarLoaded,
               )
             : GestureDetector(
-                onTap: () {
-                  //TODO: Open the photo and can zoom in and out
-                },
+                onTap: () {},
                 child: UserAvatar(
                   user: widget.userInfo,
                   clickable: false,
