@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sheeta/classes/image_utils.dart';
 import 'package:sheeta/components/bodies/profile/profile_screen.dart';
 import 'package:sheeta/components/designs/containers/screen_container.dart';
@@ -8,7 +9,9 @@ import 'package:sheeta/components/designs/global/is_loading.dart';
 import 'package:sheeta/components/designs/texts/text_title.dart';
 import 'package:sheeta/firebase/auth.dart';
 import 'package:sheeta/firebase/posts.dart';
+import 'package:sheeta/firebase/storage.dart';
 import 'package:sheeta/models/user.dart';
+import 'package:sheeta/providers/user_provider.dart';
 import 'package:sheeta/shared/show_toast.dart';
 import 'package:sheeta/static/colors.dart';
 
@@ -46,13 +49,18 @@ class _ProfileState extends State<Profile> {
 
     //* Check if the image is valid
     if (ImageUtils.isValidImage(path)) {
+      //* delete the old image from the db
+      final oldUser = await Auth().getById(uid: widget.uid);
+      deleteImageFromStorage('avatar', oldUser!.avatar);
+
       //* send the image to db
       final user = await Auth()
-          .updateAvatar(context: context, imgName: name, imgPath: path);
+          .updateAvatar(oldUser: oldUser, imgName: name, imgPath: path);
 
       //* Update userInfo data
       setState(() {
         userInfo = user;
+        Provider.of<UserProvider>(context, listen: false).refreshUser();
       });
     } else {
       // Handle invalid image
@@ -75,7 +83,7 @@ class _ProfileState extends State<Profile> {
   }
 
   Future<void> updateUserInfo() async {
-    UserData user = await Auth().getById(uid: widget.uid);
+    UserData? user = await Auth().getById(uid: widget.uid);
 
     setState(() {
       userInfo = user;
@@ -84,7 +92,7 @@ class _ProfileState extends State<Profile> {
 
   fetch() async {
     try {
-      UserData user = await Auth().getById(uid: widget.uid);
+      UserData? user = await Auth().getById(uid: widget.uid);
       bool check = Auth().isItMe(uid: widget.uid);
       List fls =
           await Auth().getCollection(collection: 'followers', uid: widget.uid);

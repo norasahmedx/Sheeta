@@ -10,7 +10,6 @@ import 'package:sheeta/models/user.dart';
 import 'package:sheeta/providers/user_provider.dart';
 import 'package:sheeta/screens/auth/login.dart';
 import 'dart:developer';
-
 import 'package:sheeta/shared/show_toast.dart';
 
 class Auth {
@@ -164,25 +163,24 @@ class Auth {
   }
 
   Future<UserData> updateAvatar({
-    required BuildContext context,
+    required UserData? oldUser,
     required imgName,
     required imgPath,
   }) async {
     try {
-      final auth = Provider.of<UserProvider>(context, listen: false).getUser;
       if (imgName != null || imgPath != null) {
+        // delete old avatar from storage
+        deleteImageFromStorage('avatar', oldUser!.avatarName);
+
         // upload photo to storage
         String url = await getImgURL(imgName: imgName, imgPath: imgPath);
 
-        final user = {
-          'uid': auth!.uid,
-          'avatar': url,
-        };
+        final user = {'avatar': url, 'avatarName': imgName};
 
         // update the user's data
         await FirebaseFirestore.instance
             .collection(table)
-            .doc(auth.uid)
+            .doc(oldUser.uid)
             .update(user);
         // update the user's data in every single post
         await Posts().updateUserInfo(user);
@@ -195,7 +193,7 @@ class Auth {
         //* Get the updated user data
         var userDocument = await FirebaseFirestore.instance
             .collection(table)
-            .doc(auth.uid)
+            .doc(oldUser.uid)
             .get();
 
         // Convert DocumentSnapshot to UserData
@@ -212,6 +210,7 @@ class Auth {
           username: '',
           bio: '',
           avatar: '',
+          avatarName: '',
         );
       }
     } catch (e) {
@@ -223,6 +222,7 @@ class Auth {
         username: '',
         bio: '',
         avatar: '',
+        avatarName: '',
       );
     }
   }
@@ -235,7 +235,7 @@ class Auth {
     }
   }
 
-  getById({required String uid}) async {
+  Future<UserData?> getById({required String uid}) async {
     try {
       DocumentSnapshot<Map<String, dynamic>> snapshot =
           await FirebaseFirestore.instance.collection('users').doc(uid).get();
@@ -244,6 +244,7 @@ class Auth {
     } catch (e) {
       log(e.toString());
     }
+    return null;
   }
 
   searchBy({required String val, required String prop}) async {
@@ -313,7 +314,10 @@ class Auth {
             email: email,
             bio: bio,
             username: username,
-            avatar: url,
+            avatar: url.isEmpty
+                ? 'https://firebasestorage.googleapis.com/v0/b/sheeta-noras.appspot.com/o/avatar%2Favatar.png?alt=media&token=6d7b0610-5d26-47c5-b7db-01c7e728acfb'
+                : url,
+            avatarName: imgName ?? 'avatar.png',
             uid: credential.user!.uid,
           );
 

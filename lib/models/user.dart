@@ -5,6 +5,7 @@ class UserData {
   String bio;
   String email;
   String avatar;
+  String avatarName;
   String uid;
 
   UserData({
@@ -13,6 +14,7 @@ class UserData {
     required this.username,
     required this.bio,
     required this.avatar,
+    required this.avatarName,
   });
 
   Map<String, dynamic> convertToMap() {
@@ -22,6 +24,7 @@ class UserData {
       'username': username,
       'bio': bio,
       'avatar': avatar,
+      'avatarName': avatarName,
     };
   }
 
@@ -36,6 +39,7 @@ class UserData {
       username: snapshot['username'],
       bio: snapshot['bio'],
       avatar: snapshot['avatar'],
+      avatarName: snapshot['avatarName'],
     );
   }
 
@@ -49,6 +53,7 @@ class UserData {
       username: data['username'],
       bio: data['bio'],
       avatar: data['avatar'],
+      avatarName: data['avatarName'],
     );
   }
 }

@@ -17,7 +17,7 @@ class FormImagePicker extends StatefulWidget {
     required this.updateImg,
     this.imgName,
     this.imgPath,
-    this.defImage = 'assets/avatar.png',
+    this.defImage = 'assets/default.png',
     this.profile = false,
     this.isAvatarLoaded = true,
   });
