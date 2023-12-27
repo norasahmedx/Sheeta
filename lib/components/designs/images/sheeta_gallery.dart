@@ -4,6 +4,7 @@ import 'package:photo_manager/photo_manager.dart';
 import 'package:sheeta/components/designs/texts/text_title.dart';
 import 'package:sheeta/models/image.dart';
 import 'package:sheeta/static/colors.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class SheetaGallery extends StatefulWidget {
   const SheetaGallery({super.key, this.updateImg});
@@ -25,70 +26,94 @@ class _SheetaGalleryState extends State<SheetaGallery> {
     fetchAllImages();
   }
 
+  Future<void> checkAndRequestPermissions() async {
+    PermissionStatus status = await Permission.storage.status;
+    if (status.isGranted) {
+      // Permission is granted. Proceed with accessing images.
+      fetchAllImages();
+    } else {
+      // Request permission.
+      status = await Permission.storage.request();
+      if (status.isGranted) {
+        // Permission granted after request. Proceed with accessing images.
+        fetchAllImages();
+      } else if (status.isDenied) {
+        // Permission denied. Handle accordingly.
+        return;
+      } else if (status.isPermanentlyDenied) {
+        // The user has permanently denied the permission.
+        // You may want to open app settings to let the user grant the permission manually.
+        openAppSettings();
+      }
+    }
+  }
+
   fetchAllImages() async {
     lastPage = currPage;
-    final permission = await PhotoManager.requestPermissionExtend();
-    if (!permission.isAuth) return PhotoManager.openSetting();
 
     List<AssetPathEntity> albums = await PhotoManager.getAssetPathList(
       type: RequestType.image,
       onlyAll: true,
     );
 
-    List<AssetEntity> photos =
-        await albums[0].getAssetListPaged(page: currPage, size: 24);
+    if (albums.isNotEmpty) {
+      List<AssetEntity> photos =
+          await albums[0].getAssetListPaged(page: currPage, size: 24);
 
-    List<Widget> temp = [];
+      List<Widget> temp = [];
 
-    for (var photo in photos) {
-      temp.add(FutureBuilder(
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            return ClipRRect(
-              borderRadius: BorderRadius.circular(5),
-              child: InkWell(
-                onTap: () {
-                  if (widget.updateImg == null) {
-                    Navigator.pop(context,
-                        Photo(imgName: photo.title, imgPath: snapshot.data));
-                  } else {
-                    widget.updateImg!(snapshot.data, photo.title);
-                  }
-                },
+      for (var photo in photos) {
+        temp.add(FutureBuilder(
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              return ClipRRect(
                 borderRadius: BorderRadius.circular(5),
-                splashFactory: NoSplash.splashFactory,
-                child: Container(
-                  margin: const EdgeInsets.all(2),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.grey.withOpacity(0.4),
-                      width: 1,
+                child: InkWell(
+                  onTap: () {
+                    if (widget.updateImg == null) {
+                      Navigator.pop(context,
+                          Photo(imgName: photo.title, imgPath: snapshot.data));
+                    } else {
+                      widget.updateImg!(snapshot.data, photo.title);
+                    }
+                  },
+                  borderRadius: BorderRadius.circular(5),
+                  splashFactory: NoSplash.splashFactory,
+                  child: Container(
+                    margin: const EdgeInsets.all(2),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.grey.withOpacity(0.4),
+                        width: 1,
+                      ),
+                      image: DecorationImage(
+                        image: MemoryImage(snapshot.data as Uint8List),
+                        fit: BoxFit.cover,
+                      ),
+                      borderRadius: BorderRadius.circular(5),
                     ),
-                    image: DecorationImage(
-                      image: MemoryImage(snapshot.data as Uint8List),
-                      fit: BoxFit.cover,
-                    ),
-                    borderRadius: BorderRadius.circular(5),
                   ),
                 ),
-              ),
-            );
-          }
+              );
+            }
 
-          return const SizedBox();
-        },
-        future: photo.thumbnailDataWithSize(const ThumbnailSize(200, 200)),
-      ));
+            return const SizedBox();
+          },
+          future: photo.thumbnailDataWithSize(const ThumbnailSize(200, 200)),
+        ));
+      }
+      setState(() {
+        imageList.addAll(temp);
+        currPage++;
+      });
     }
-    setState(() {
-      imageList.addAll(temp);
-      currPage++;
-    });
+
+    print('The albums length is: ${albums.length}');
   }
 
   @override
   void initState() {
-    fetchAllImages();
+    checkAndRequestPermissions();
     super.initState();
   }
 
