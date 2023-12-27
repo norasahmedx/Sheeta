@@ -1,7 +1,9 @@
+import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:sheeta/components/designs/texts/text_title.dart';
+import 'package:sheeta/firebase/storage.dart';
 import 'package:sheeta/models/image.dart';
 import 'package:sheeta/static/colors.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -69,12 +71,22 @@ class _SheetaGalleryState extends State<SheetaGallery> {
               return ClipRRect(
                 borderRadius: BorderRadius.circular(5),
                 child: InkWell(
-                  onTap: () {
+                  onTap: () async {
+                    File? file = await photo.originFile;
+                    Uint8List bytes = file!.readAsBytesSync();
+
+                    // Compress the image to a maximum size of 1 MB
+                    Uint8List compressedBytes =
+                        Storage().compressImage(bytes, maxSizeInBytes: 1024 * 1024);
+
                     if (widget.updateImg == null) {
-                      Navigator.pop(context,
-                          Photo(imgName: photo.title, imgPath: snapshot.data));
+                      if (!mounted) return;
+                      Navigator.pop(
+                          context,
+                          Photo(
+                              imgName: photo.title, imgPath: compressedBytes));
                     } else {
-                      widget.updateImg!(snapshot.data, photo.title);
+                      widget.updateImg!(compressedBytes, photo.title);
                     }
                   },
                   borderRadius: BorderRadius.circular(5),
@@ -107,8 +119,6 @@ class _SheetaGalleryState extends State<SheetaGallery> {
         currPage++;
       });
     }
-
-    print('The albums length is: ${albums.length}');
   }
 
   @override

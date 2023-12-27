@@ -171,11 +171,11 @@ class Auth {
       if (imgName != null || imgPath != null) {
         // delete the old avatar from storage if the user already published an avatar
         if (oldUser!.avatarName != 'default.png') {
-          deleteImageFromStorage('avatar', oldUser.avatarName);
+          Storage().deleteImageFromStorage('avatar', oldUser.avatarName);
         }
 
         // upload photo to storage
-        String url = await getImgURL(imgName: imgName, imgPath: imgPath);
+        String url = await Storage().getImgURL(imgName, imgPath, 'avatar');
 
         final user = {'avatar': url, 'avatarName': imgName};
 
@@ -307,7 +307,7 @@ class Auth {
 
         if (FirebaseAuth.instance.currentUser != null) {
           // Registration successful, now upload the image
-          String url = await getImgURL(imgName: imgName, imgPath: imgPath);
+          String url = await Storage().getImgURL(imgName, imgPath, 'avatar');
 
           // Send user data to Firestore
           CollectionReference users =

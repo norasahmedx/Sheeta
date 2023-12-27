@@ -51,7 +51,7 @@ class _ProfileState extends State<Profile> {
     if (ImageUtils.isValidImage(path)) {
       //* delete the old image from the db
       final oldUser = await Auth().getById(uid: widget.uid);
-      deleteImageFromStorage('avatar', oldUser!.avatar);
+      Storage().deleteImageFromStorage('avatar', oldUser!.avatar);
 
       //* send the image to db
       final user = await Auth()
