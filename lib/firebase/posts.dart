@@ -68,7 +68,8 @@ class Posts {
     try {
       final user = Provider.of<UserProvider>(context, listen: false).getUser;
       final id = const Uuid().v1();
-      final String postBody = await Storage().getImgURL(imgName, imgPath, '$table/$uid');
+      final String postBody =
+          await Storage.getImgURL(imgName!, imgPath!, '$table/$uid');
 
       // send data to Firestore
       CollectionReference posts = FirebaseFirestore.instance.collection(table);

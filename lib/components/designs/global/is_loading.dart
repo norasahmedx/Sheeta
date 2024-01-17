@@ -4,16 +4,16 @@ import 'package:sheeta/static/colors.dart';
 import 'package:sheeta/static/sizes.dart';
 
 class IsLoading extends StatelessWidget {
-  final Widget child;
   final String type;
   final bool loaded;
   final bool keepChild;
+  final Widget child;
   const IsLoading({
     super.key,
-    required this.child,
     required this.loaded,
     this.type = 'circular',
     this.keepChild = false,
+    required this.child,
   });
 
   @override

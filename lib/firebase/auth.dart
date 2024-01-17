@@ -171,11 +171,11 @@ class Auth {
       if (imgName != null || imgPath != null) {
         // delete the old avatar from storage if the user already published an avatar
         if (oldUser!.avatarName != 'default.png') {
-          Storage().deleteImageFromStorage('avatar', oldUser.avatarName);
+          Storage.deleteImageFromStorage('avatar', oldUser.avatarName);
         }
 
         // upload photo to storage
-        String url = await Storage().getImgURL(imgName, imgPath, 'avatar');
+        String url = await Storage.getImgURL(imgName, imgPath, 'avatar');
 
         final user = {'avatar': url, 'avatarName': imgName};
 
@@ -237,7 +237,7 @@ class Auth {
     }
   }
 
-  Future<UserData?> getById({required String uid}) async {
+  Future<UserData> getById({required String uid}) async {
     try {
       DocumentSnapshot<Map<String, dynamic>> snapshot =
           await FirebaseFirestore.instance.collection('users').doc(uid).get();
@@ -245,8 +245,21 @@ class Auth {
       return UserData.convertSnap2Model(snapshot);
     } catch (e) {
       log(e.toString());
+      rethrow;
     }
-    return null;
+  }
+
+  Future<DocumentSnapshot<Object?>>? getStreamById(
+      {required String uid}) async {
+    try {
+      DocumentSnapshot<Map<String, dynamic>> snapshot =
+          await FirebaseFirestore.instance.collection('users').doc(uid).get();
+
+      return snapshot;
+    } catch (e) {
+      debugPrint(e.toString());
+      rethrow;
+    }
   }
 
   searchBy({required String val, required String prop}) async {
@@ -296,47 +309,53 @@ class Auth {
     required imgPath,
   }) async {
     try {
-      final valid = await Auth().uniqueField('username', username);
+      if (!Storage.isValidImage(imgPath)) {
+        showToast('The image is not valid, please try another one');
+        return false;
+      }
 
-      if (valid) {
-        var credential =
-            await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      if (!await Auth().uniqueField('username', username)) {
+        showToast('The username is already taken. Please choose another one.');
+        return false;
+      }
+
+      var credential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      if (FirebaseAuth.instance.currentUser != null) {
+        // Registration successful, now upload the image
+        String url = await Storage.getImgURL(imgName, imgPath, 'avatar');
+
+        //* Check if the image is a valid image or not
+        if (url.isEmpty) {}
+
+        // Send user data to Firestore
+        CollectionReference users =
+            FirebaseFirestore.instance.collection('users');
+        UserData user = UserData(
           email: email,
-          password: password,
+          bio: bio,
+          username: username,
+          avatar: url.isEmpty
+              ? 'https://firebasestorage.googleapis.com/v0/b/sheeta-noras.appspot.com/o/avatar%2Fdefault.png?alt=media&token=ff23e64b-8a7f-4303-86ce-228107085438'
+              : url,
+          avatarName: imgName ?? 'default.png',
+          uid: credential.user!.uid,
         );
 
-        if (FirebaseAuth.instance.currentUser != null) {
-          // Registration successful, now upload the image
-          String url = await Storage().getImgURL(imgName, imgPath, 'avatar');
+        await users.doc(credential.user!.uid).set(user.convertToMap());
 
-          // Send user data to Firestore
-          CollectionReference users =
-              FirebaseFirestore.instance.collection('users');
-          UserData user = UserData(
-            email: email,
-            bio: bio,
-            username: username,
-            avatar: url.isEmpty
-                ? 'https://firebasestorage.googleapis.com/v0/b/sheeta-noras.appspot.com/o/avatar%2Fdefault.png?alt=media&token=ff23e64b-8a7f-4303-86ce-228107085438'
-                : url,
-            avatarName: imgName ?? 'default.png',
-            uid: credential.user!.uid,
-          );
-
-          await users.doc(credential.user!.uid).set(user.convertToMap());
-
-          // Show success message
-          if (ctx.mounted) {
-            showToast('Your account was created successfully!');
-          }
-
-          return true;
-        } else {
-          showToast('Registration failed. Please try again.');
-          return false;
+        // Show success message
+        if (ctx.mounted) {
+          showToast('Your account was created successfully!');
         }
+
+        return true;
       } else {
-        showToast('The username is already taken. Please choose another one.');
+        showToast('Registration failed. Please try again.');
         return false;
       }
     } catch (e) {

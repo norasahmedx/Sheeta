@@ -2,7 +2,6 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sheeta/classes/image_utils.dart';
 import 'package:sheeta/components/bodies/profile/profile_screen.dart';
 import 'package:sheeta/components/designs/containers/screen_container.dart';
 import 'package:sheeta/components/designs/global/is_loading.dart';
@@ -48,10 +47,10 @@ class _ProfileState extends State<Profile> {
     }
 
     //* Check if the image is valid
-    if (ImageUtils.isValidImage(path)) {
+    if (Storage.isValidImage(path)) {
       //* delete the old image from the db
       final oldUser = await Auth().getById(uid: widget.uid);
-      Storage().deleteImageFromStorage('avatar', oldUser!.avatar);
+      Storage.deleteImageFromStorage('avatar', oldUser.avatar);
 
       //* send the image to db
       final user = await Auth()

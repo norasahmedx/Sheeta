@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:sheeta/components/designs/texts/text_title.dart';
-import 'package:sheeta/firebase/storage.dart';
 import 'package:sheeta/models/image.dart';
 import 'package:sheeta/static/colors.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -75,18 +74,12 @@ class _SheetaGalleryState extends State<SheetaGallery> {
                     File? file = await photo.originFile;
                     Uint8List bytes = file!.readAsBytesSync();
 
-                    // Compress the image to a maximum size of 1 MB
-                    Uint8List compressedBytes =
-                        Storage().compressImage(bytes, maxSizeInBytes: 1024 * 1024);
-
                     if (widget.updateImg == null) {
                       if (!mounted) return;
                       Navigator.pop(
-                          context,
-                          Photo(
-                              imgName: photo.title, imgPath: compressedBytes));
+                          context, Photo(imgName: photo.title, imgPath: bytes));
                     } else {
-                      widget.updateImg!(compressedBytes, photo.title);
+                      widget.updateImg!(bytes, photo.title);
                     }
                   },
                   borderRadius: BorderRadius.circular(5),

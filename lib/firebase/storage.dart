@@ -1,34 +1,51 @@
 import 'dart:typed_data';
-import 'package:image/image.dart' as img;
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:sheeta/shared/show_toast.dart';
+import 'package:image/image.dart' as img;
 
 class Storage {
-  Future<String> getImgURL(
-    String? imgName,
-    Uint8List? imgPath,
-    String? directory,
-  ) async {
+  static bool isValidImage(Uint8List data) {
     try {
-      // Upload image to firebase storage
-      Reference storageRef =
-          FirebaseStorage.instance.ref("$directory/$imgName");
-      // use this code if u are using flutter web
-      UploadTask uploadTask = storageRef.putData(
-          imgPath!, SettableMetadata(contentType: 'image/jpeg'));
-      TaskSnapshot snap = await uploadTask;
-
-      // Get img url
-      String url = await snap.ref.getDownloadURL();
-
-      return url;
+      img.decodeImage(data);
+      return true;
     } catch (e) {
-      rethrow;
+      return false;
     }
   }
 
-  Future<void> deleteImageFromStorage(String directory, String imgName) async {
+  static Future<String> getImgURL(
+    String imgName,
+    Uint8List imgPath,
+    String? directory,
+  ) async {
+    try {
+      // Check this image is a valid image or not
+      if (Storage.isValidImage(imgPath)) {
+        // Upload image to firebase storage
+        Reference storageRef =
+            FirebaseStorage.instance.ref("$directory/$imgName");
+        // use this code if u are using flutter web
+        UploadTask uploadTask = storageRef.putData(
+            imgPath, SettableMetadata(contentType: 'image/jpeg'));
+        TaskSnapshot snap = await uploadTask;
+
+        // Get img url
+        String url = await snap.ref.getDownloadURL();
+
+        return url;
+      } else {
+        showToast('This image is not valid, please try another one');
+        return '';
+      }
+    } catch (e) {
+      showWrongToast();
+      return '';
+    }
+  }
+
+  static Future<void> deleteImageFromStorage(
+      String directory, String imgName) async {
     try {
       // Get reference to the image in Firebase Storage
       final Reference storageReference =
@@ -40,21 +57,5 @@ class Storage {
       debugPrint('Error deleting image: $e');
       showToast('Something went wrong while deleting the image');
     }
-  }
-
-// Function to compress the image
-  Uint8List compressImage(Uint8List imageBytes, {int maxSizeInBytes = 1024}) {
-    img.Image image = img.decodeImage(imageBytes)!;
-
-    // Quality is between 0 and 100, adjust it according to your needs
-    int quality = 100;
-
-    // Compress the image until it's below the desired size
-    while (imageBytes.length > maxSizeInBytes && quality > 0) {
-      imageBytes = img.encodeJpg(image, quality: quality);
-      quality -= 5;
-    }
-
-    return imageBytes;
   }
 }

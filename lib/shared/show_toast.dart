@@ -13,3 +13,15 @@ void showToast(String message) {
     fontSize: 16.0,
   );
 }
+
+void showWrongToast() {
+  Fluttertoast.showToast(
+    msg: 'Something went wrong, please try again later',
+    toastLength: Toast.LENGTH_SHORT,
+    gravity: ToastGravity.BOTTOM,
+    timeInSecForIosWeb: 1,
+    backgroundColor: primaryColor,
+    textColor: Colors.white,
+    fontSize: 16.0,
+  );
+}

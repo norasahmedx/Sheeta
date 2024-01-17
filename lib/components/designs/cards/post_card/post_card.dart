@@ -35,9 +35,9 @@ class _PostCardState extends State<PostCard> {
   }
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
     fetchUser();
+    super.didChangeDependencies();
   }
 
   @override
