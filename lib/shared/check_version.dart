@@ -6,7 +6,7 @@ import 'package:sheeta/shared/show_popup.dart';
 // Function to check for a new version from Firebase
 Future<void> checkForNewVersion(context) async {
   try {
-    String currentVersion = "0.1.3"; // Replace with your app's current version
+    String currentVersion = "0.1.4"; // Replace with your app's current version
 
     // Fetch the latest version from Firebase.
     var latestVersion = await FirebaseFirestore.instance

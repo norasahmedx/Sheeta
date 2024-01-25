@@ -1,7 +1,7 @@
 name: sheeta
 description: 'Social media application help you to share photos with your friends'
 publish_to: 'none'
-version: 0.1.4+4
+version: 0.1.4+5
 
 environment:
   sdk: ^3.2.0
