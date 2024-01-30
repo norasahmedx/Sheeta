@@ -34,10 +34,10 @@ Explore more about Sheeta on our website: [Sheeta Website](https://norasahmedx.w
 
 Embark on a visual journey with Sheeta and share your world with a community that appreciates the art of storytelling through images.
 
-- **[Download The Latest Version: v0.1.4 (Beta Version)](https://github.com/Sheeta-Official/Sheeta-Mobile-Releases/releases/tag/v0.1.4)**
-- [Download Sheeta v0.1.3 (Beta Version)](https://github.com/Sheeta-Official/Sheeta-Mobile-Releases/releases/tag/v0.1.3)
-- [Download Sheeta v0.1.2 (Beta Version)](https://github.com/Sheeta-Official/Sheeta-Mobile-Releases/releases/tag/v0.1.2)
-- [Download Sheeta v0.1.1 (Beta Version)](https://github.com/Sheeta-Official/Sheeta-Mobile-Releases/releases/tag/v0.1.1)
+- **[Download The Latest Version: v0.1.4 (Beta Version)](https://github.com/norasahmedx/Sheeta/releases/tag/v0.1.4)**
+- [Download Sheeta v0.1.3 (Beta Version)](https://github.com/norasahmedx/Sheeta/releases/tag/v0.1.3)
+- [Download Sheeta v0.1.2 (Beta Version)](https://github.com/norasahmedx/Sheeta/releases/tag/v0.1.2)
+- [Download Sheeta v0.1.1 (Beta Version)](https://github.com/norasahmedx/Sheeta/releases/tag/v0.1.1)
 
 ## Support
 
