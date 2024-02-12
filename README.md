@@ -1,6 +1,6 @@
 # Sheeta v0.1.4 (Beta Version)
 
-![Sheeta Logo](https://res.cloudinary.com/duhdjmrqe/image/upload/v1701695066/mohamedmonster/sheeta_tlghpm.png)
+![Sheeta Logo](https://res.cloudinary.com/duhdjmrqe/image/upload/v1707730766/mohamedmonster/projects-assets/sheeta_n3nt07.png)
 
 ## Table of Contents
 
